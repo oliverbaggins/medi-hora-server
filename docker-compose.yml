@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  database:
+    restart: always
+    container_name: mongo_db
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+  api:
+    build: .
+    restart: always
+    container_name: node_api
+    command: npm run devStart
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/app
+    links:
+      - database

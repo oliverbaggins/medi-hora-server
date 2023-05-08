@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 // Esquema para o usuário
 const UsuarioSchema = new mongoose.Schema({
+  _id:{
+    type: String,
+  
+  },
   nome: {
     type: String,
     required: true
@@ -13,7 +17,8 @@ const UsuarioSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
+    //unique: true,
+   
   },
   senha: {
     type: String,
@@ -50,13 +55,16 @@ const LembreteSchema = new mongoose.Schema({
 });
 
 
+ module.exports = UsuarioSchema
+
 // Modelo para o usuário
-const User = mongoose.model('User', UsuarioSchema);
+// const User = mongoose.model('User', UsuarioSchema);
 
-// Modelo para o lembrete de medicamento
-const Lembrete = mongoose.model('Lembrete', LembreteSchema);
+// // Modelo para o lembrete de medicamento
+// const Lembrete = mongoose.model('Lembrete', LembreteSchema);
 
-module.exports = {
-  User,
-  Lembrete,
-};
+// module.exports = {
+//   User,
+//   Lembrete,
+  
+// };

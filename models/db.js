@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const DB_URL = 'mongodb://localhost:27017/ NOME DO BANCO FICA AQUI';
+const DB_URL = 'mongodb://localhost:27017/simedic';
 
 mongoose.connect(DB_URL, {
   useNewUrlParser: true,

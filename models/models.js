@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const UsuarioSchema = new mongoose.Schema({
+  _id:{
+    type: String,
+  
+  },
   nome: {
     type: String,
     required: true
@@ -12,7 +16,8 @@ const UsuarioSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    unique: true,
+    //unique: true,
+   
   },
   senha: {
     type: String,
@@ -89,3 +94,4 @@ module.exports = {
   Lembrete,
   Historico,
 };
+

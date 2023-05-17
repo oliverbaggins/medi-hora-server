@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-// Esquema para o usuário
 const UsuarioSchema = new mongoose.Schema({
   _id:{
     type: String,
@@ -26,45 +25,73 @@ const UsuarioSchema = new mongoose.Schema({
   },
 });
 
-// Esquema para o lembrete de medicamento
 const LembreteSchema = new mongoose.Schema({
-    remedio: {
-      type: String,
-      required: true
-    },
-    inicio: {
-      type: Date,
-      required: true
-    },
-    fim: {
-      type: Date,
-      required: true
-    },
-    horario: {
-      type: String,
-      required: true
-    },
-    frequencia: {
-      type: String,
-      enum: ['a cada 4 horas' ,'a cada 6 horas', 'a cada 8 horas', 'a cada 12 horas'],
-    },
-    idUsuario: {
-      type: String,
-      required: true
-    }
+  remedio: {
+    type: String,
+    required: true
+  },
+  inicio: {
+    type: Date,
+    required: true
+  },
+  fim: {
+    type: Date,
+    required: true
+  },
+  horario: {
+    type: String,
+    required: true
+  },
+  frequencia: {
+    type: String,
+    enum: ['a cada 4 horas' ,'a cada 6 horas', 'a cada 8 horas', 'a cada 12 horas'],
+    required: true,
+  },
+  idUsuario: {
+    type: String,
+    required: true
+  }
 });
 
+const HistoricoSchema = new mongoose.Schema({
+  lembrete: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    ref: 'Lembrete',
+    required: true
+  },
+  usuario: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Usuario',
+    required: true
+  },
+  inicio: { 
+    type: Date, 
+    required: true 
+  },
+  fim: { 
+    type: Date, 
+    required: true 
+  },
+  Tomou: { 
+    type: Boolean,
+    required: true,
+    default: false 
+  },
+  DataTomou: { 
+    type: Date, 
+    required: true 
+  },
+});
 
- module.exports = UsuarioSchema
+const Usuario = mongoose.model('Usuario', UsuarioSchema);
 
-// Modelo para o usuário
-// const User = mongoose.model('User', UsuarioSchema);
+const Lembrete = mongoose.model('Lembrete', LembreteSchema);
 
-// // Modelo para o lembrete de medicamento
-// const Lembrete = mongoose.model('Lembrete', LembreteSchema);
+const Historico = mongoose.model('Historico', HistoricoSchema);
 
-// module.exports = {
-//   User,
-//   Lembrete,
-  
-// };
+module.exports = {
+  Usuario,
+  Lembrete,
+  Historico,
+};
+

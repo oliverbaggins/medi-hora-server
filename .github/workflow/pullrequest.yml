@@ -1,0 +1,47 @@
+#Nome da action
+name: Pull Request
+
+
+#Quando a action será disparada
+#Quando acontecer um pull-request
+on: [pull_request]
+
+#Quais os jobs irá executar
+jobs:
+  install:
+    name: Installing Packages
+    #Monta uma máquina Ubuntu, executa o que foi mandado e mata o processo em seguida.
+    runs-on: ubuntu-latest
+    steps:
+      -name: Checkout
+      #Da acesso a máquina Ubunto ao projeto em execução
+       uses: actions/checkout@v3
+      #Instala apenas uma vez as dependências e depois, só busca novamente no cache.
+      -name: Cache node_modules
+       uses: action/cache@v2
+       with:
+        path: node_modules
+        key: ${{ runner.os }}-${{ hashfiles('**/yarn.lock') }}
+
+      -name: Install dependencies
+       run: yarn install
+
+
+#Action para encontrar código morto
+  finddeadcode:
+    name: Find Dead code
+    runs-on: ubuntu-latest
+    needs: install
+    steps:
+      -name: Checkout
+       uses: actions/checkout@v3
+      
+      -name: Restore node_modules
+       uses: action/cache@v2
+       with:
+        path: node_modules
+        key: ${{ runner.os }}-${{ hashfiles('**/yarn.lock') }}
+
+      #Lib que varre o código em busca de função que é exportada, mas não utilizada
+      -name: Run ts-prune
+       run: yarn ts-prune --error

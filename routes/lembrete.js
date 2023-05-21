@@ -5,7 +5,7 @@ const router = express.Router();
 const collectionName = 'lembrete'; // Nome da coleção no MongoDB
 
 // Rota para criar um novo lembrete
-router.post('/users', async (req, res) => {
+router.post('/reminder', async (req, res) => {
   try {
     const { remedio, inicio, fim, horario, frequencia,idUsuario } = req.body;
 
@@ -22,7 +22,7 @@ router.post('/users', async (req, res) => {
 });
 
 // Rota para obter todos os lembretes
-router.get('/users', async (req, res) => {
+router.get('/reminder', async (req, res) => {
   try {
     const db = client.db(dbName);
     const collection = db.collection(collectionName);

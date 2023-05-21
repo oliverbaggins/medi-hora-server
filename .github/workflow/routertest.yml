@@ -1,5 +1,5 @@
 #Nome do teste
-name: Teste de Rotas GET
+name: Teste de Rotas
 
 
 #O evento será acionado quando o correr um push
@@ -25,5 +25,5 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
-      - name: Executar testes de rotas GET
+      - name: Executar testes de rotas
         run: npm test

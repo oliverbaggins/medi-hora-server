@@ -1,0 +1,36 @@
+image: atlassian/default-image:4
+  # Pipelines executados automaticamente
+pipelines:
+  branches:
+    master:
+      # - step:
+      #     name: Limpeza de cache
+      #     script:
+      #       ## Pipe de limpeza de cache
+      #       - pipe: atlassian/bitbucket-clear-cache:3.3.0
+      #         variables:
+      #           BITBUCKET_USERNAME: ${QA_DDS_USER}
+      #           BITBUCKET_APP_PASSWORD: ${QA_DDS_PASSWORD}
+      - step:
+          name: Build do ambiente de production
+          image: node:latest
+          size: 2x
+          script:
+            - ls -la
+            - npm install
+            - npm run build
+          artifacts:
+            - build/**
+      - step:
+          name: Deploy do ambiente de production
+          image: atlassian/default-image:4
+          deployment: production
+          script:
+            ## Deploy no s3 mobile
+            - pipe: atlassian/aws-s3-deploy:1.1.0
+              variables:
+                AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+                AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+                AWS_DEFAULT_REGION: "us-west-2"
+                S3_BUCKET: "app-dev-mobile/${BITBUCKET_DEPLOYMENT_ENVIRONMENT}/mobile-${BITBUCKET_DEPLOYMENT_ENVIRONMENT}-unyleya-xyz"
+                LOCAL_PATH: "build"

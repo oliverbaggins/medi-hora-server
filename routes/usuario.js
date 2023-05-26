@@ -1,38 +1,68 @@
-const express = require('express');
+const express = require('express')
+const bcrypt = require('bcrypt')
 
+const db = require('../models/db')
 
-const router = express.Router();
-const collectionName = 'User'; // Nome da coleção no MongoDB
+const routes_user = express.Router()
+const collectionName = 'Usuario' // Nome da coleção no MongoDB
+
 
 // Rota para criar um novo usuário
-router.post('/users', async (req, res) => {
+routes_user.post('/create_user', async (req, res) => {
   try {
-    const { _id, nome, sobrenome, email, senha  } = req.body;
+    const salt = await bcrypt.genSalt()
 
-    const db = client.db(dbName);
-    const collection = db.collection(collectionName);
+    const { nome, sobrenome, email, senha } = req.body
 
-    const result = await collection.insertOne({ _id, nome, sobrenome, email, senha });
+    const collection = db.collection(collectionName)
 
-    res.status(201).json(result.ops[0]);
+    const result = await collection.insertOne(
+      {
+        nome: nome,
+        sobrenome: sobrenome,
+        email: email,
+        senha: await bcrypt.hash(senha, salt)
+      }
+    )
+
+    res.status(201).json(result)
   } catch (error) {
-    console.error('Erro ao criar usuário', error);
-    res.status(500).json({ error: 'Erro ao criar usuário' });
+    console.error('Erro ao criar usuário', error)
+    res.status(500).json({ error: 'Erro ao criar usuário' })
   }
-});
+})
 
 // Rota para obter todos os usuários
-router.get('/users', async (req, res) => {
+routes_user.get('/get_all_users', async (req, res) => {
   try {
-    const db = client.db(dbName);
-    const collection = db.collection(collectionName);
 
-    const users = await collection.find({}).toArray();
+    const collection = db.collection(collectionName)
 
-    res.json(users);
+    const users = await collection.find({}).toArray()
+
+    res.json(users)
   } catch (error) {
-    console.error('Erro ao obter usuários', error);
-    res.status(500).json({ error: 'Erro ao obter usuários' });
+    console.error('Erro ao obter usuários', error)
+    res.status(500).json({ error: 'Erro ao obter usuários' })
   }
-});
+})
 
+routes_user.post('/login', async (req, res) => {
+  const collection = db.collection(collectionName)
+
+  const user = await collection.findOne({ name: req.body.name })
+
+  if (user == null) {
+    return res.status(400).send('Cannot find user')
+  }
+
+  const result = await bcrypt.compare(req.body.senha, user.senha)
+  if (result) {
+    res.status(200).send('Success')
+  } else {
+    res.status(200).send('Not Allowed')
+  }
+
+})
+
+module.exports = routes_user

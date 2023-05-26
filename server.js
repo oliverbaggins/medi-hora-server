@@ -16,4 +16,3 @@ app.get('/', (req, res) => {
 app.use('/users', routes_user)
 
 app.listen(PORT, HOST, () => console.log('Server Started'))
-

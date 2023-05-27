@@ -11,10 +11,14 @@ services:
     build: .
     restart: always
     container_name: node_api
-    command: npm run devStart
+    command: sh -c 'npm run start && echo $DATABASE_URL $ACCESS_TOKEN_SECRET $REFRESH_TOKEN_SECRET'
     ports:
       - "3000:3000"
     volumes:
       - .:/usr/app
     links:
       - database
+    environment:
+      - DATABASE_URL=mongodb://mongo_db/reminders
+      -               ACCESS_TOKEN_SECRET=4f81c06fc6bd51bc8a6968f9796f5f2f126126fad677db479d0491842510cc314c2aab73df89137d55012f00de3f50952ffcfa54464da21f9ec0ff4972dd729f
+      - REFRESH_TOKEN_SECRET=fef1180ac7dd8c951a06e87dc1e962522998bf7e903d00f0b35bdc232d5a1440bedca6216fed30339951e0a1c86ec14f14fc8ed66045580001e1cefba63acb46

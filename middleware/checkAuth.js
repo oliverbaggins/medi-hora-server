@@ -5,13 +5,7 @@ module.exports = async (req, res, next) => {
   const token = req.headers.authorization;
 
   if (!token) {
-    return res.status(401).json({
-      errors: [
-        {
-          msg: 'No token found'
-        }
-      ]
-    })
+    return res.status(401).json({ message: 'No token found' })
   }
 
   try {
@@ -26,12 +20,6 @@ module.exports = async (req, res, next) => {
     req.user = user._id;
     next();
   } catch (error) {
-    return res.status(403).json({
-      errors: [
-        {
-          msg: 'Invalid token'
-        }
-      ]
-    });
+    return res.status(403).json({ message: 'Invalid token' });
   }
 };

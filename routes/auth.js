@@ -3,10 +3,11 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const { check, validationResult } = require('express-validator')
+const checkAuth = require('../middleware/checkAuth')
 
 const errorResponse = (res, statusCode, message) => {
   return res.status(statusCode).json({ error: message })
-};
+}
 
 router.get('/allusers', async (req, res) => {
   try {
@@ -15,7 +16,7 @@ router.get('/allusers', async (req, res) => {
   } catch (err) {
     errorResponse(res, 500, err.message)
   }
-});
+})
 
 router.post('/signup', [
   check('email', 'Please provide a valid email').isEmail(),
@@ -39,45 +40,77 @@ router.post('/signup', [
     }
 
     const newUser = await user.save()
-    const accessToken = jwt.sign({ email: req.body.email }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '10s'
+    
+    // Include the user ID in the token payload
+    const accessToken = jwt.sign({ _id: newUser._id, email: req.body.email }, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: '1m'
     });
+    
     res.json({ accessToken: accessToken, user: newUser })
   } catch (err) {
-    errorResponse(res, 400, err.message);
+    errorResponse(res, 400, err.message)
   }
-});
+})
 
 router.post('/login', async (req, res) => {
-  const user = await User.findOne({ email: req.body.email })
+  const user = await User.findOne({ email: req.body.email });
 
   if (!user) {
-    return errorResponse(res, 400, 'Cannot find this email')
+    return errorResponse(res, 400, 'Cannot find this email');
   }
 
   if (!req.body.password) {
-    return errorResponse(res, 400, 'Password is required')
+    return errorResponse(res, 400, 'Password is required');
   }
 
-  const passwordMatch = await bcrypt.compare(req.body.password, user.password)
+  const passwordMatch = await bcrypt.compare(req.body.password, user.password);
   if (!passwordMatch) {
-    return errorResponse(res, 400, 'Invalid password')
+    return errorResponse(res, 400, 'Invalid password');
   }
 
-  const accessToken = jwt.sign({ email: req.body.email }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '10s'
+  // Include the user ID in the token payload
+  const accessToken = jwt.sign({ _id: user._id, email: req.body.email }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: '1m'
   });
 
-  const refreshToken = jwt.sign({ email: req.body.email }, process.env. REFRESH_TOKEN_SECRET, {
-    expiresIn: '1m'
-  })
+  const refreshToken = jwt.sign({ _id: user._id, email: req.body.email }, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: '2m'
+  });
 
-  user.refreshTokens.push({ token: refreshToken }) 
+  user.refreshTokens.push({ token: refreshToken });
 
-  await user.save() 
+  await user.save();
 
-  res.json({ accessToken, refreshToken })
+  res.json({ accessToken, refreshToken });
+});
+
+
+function isTokenExpired(token) {
+  const decodedToken = jwt.decode(token)
+  return decodedToken.exp < Date.now() / 1000
+}
+
+async function removeExpiredRefreshTokens() {
+  const users = await User.find() 
+
+  users.forEach(async (user) => {
+    user.refreshTokens = user.refreshTokens.filter((tokenData) => {
+      return !isTokenExpired(tokenData.token)
+    });
+
+    await user.save()
+  });
+}
+
+removeExpiredRefreshTokens().catch((error) => {
+  console.error('Error occurred while removing expired refresh tokens:', error)
 })
+
+setInterval(() => {
+  removeExpiredRefreshTokens().catch((error) => {
+    console.error('Error occurred while removing expired refresh tokens:', error)
+  })
+}, 120000)
 
 router.post('/token', async (req, res) => {
   try {
@@ -94,10 +127,10 @@ router.post('/token', async (req, res) => {
     }
     
     const decodedToken = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET)
-    const { email } = decodedToken;
+    const { _id, email } = decodedToken;
 
-    const accessToken = jwt.sign({ email }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '10s'
+    const accessToken = jwt.sign({ _id, email }, process.env.ACCESS_TOKEN_SECRET, {
+      expiresIn: '1m'
     })
   
     res.json({ accessToken });
@@ -106,6 +139,26 @@ router.post('/token', async (req, res) => {
   }
   
 })
+
+router.delete('/deleteuser/:userId', checkAuth, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    
+    // Check if the user exists
+    const user = await User.findById(userId);
+    if (!user) {
+      return errorResponse(res, 404, 'User not found');
+    }
+
+    // Delete the user
+    await User.findByIdAndDelete(userId);
+
+    res.json({ message: 'User deleted successfully' });
+  } catch (err) {
+    errorResponse(res, 500, err.message);
+  }
+});
+
 
 router.delete('/logout', async (req, res) => {
   try {
@@ -126,4 +179,5 @@ router.delete('/logout', async (req, res) => {
     return errorResponse(res, 500, error.message)
   }
 })
+
 module.exports = router

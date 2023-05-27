@@ -10,7 +10,9 @@ const usersSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  reminders: [{ type: Schema.Types.ObjectId, ref: 'Reminder' }],
+  reminders: [{ 
+    type: Schema.Types.ObjectId, ref: 'Reminder'
+   }],
   refreshTokens: [{
     token: {
       type: String,

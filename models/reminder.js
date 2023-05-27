@@ -1,10 +1,10 @@
 const mongoose = require('mongoose')
-const { Schema } = mongoose;
 
 const remindersSchema = new mongoose.Schema({
   user_id: {
-    type: Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
+    required: true
   },
   medicine: {
     type: String,

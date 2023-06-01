@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user'); 
 
 module.exports = async (req, res, next) => {
-  const token = req.headers.authorization;
+  const token = req.header("Authorization");
 
   if (!token) {
     return res.status(401).json({ message: 'No token found' })

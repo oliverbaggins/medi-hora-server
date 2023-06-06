@@ -1,14 +1,20 @@
 const request = require('supertest');
-const app = require('../routes/reminder'); // Arquivo de rotas
+const app = require('../routes/reminders'); // Arquivo de rotas
 
 describe('Testes de rotas POST', () => {
-  it( async () => {//Deve retornar status 201 ao criar um novo recurso
-    const response = await request(app)
-      .post('/api/reminder') // Rota POST
-      .send({ data: 'remedio, horario, inicio, fim, frequencia, idUsuario ' },); // Dados a serem enviados no corpo da requisição
-    expect(response.status).toBe(201);
+  it('POST new Reminder', async () => {//Deve retornar status 401 pois o token passado é invalido
+    const response = await request('http://localhost:3000/reminders')
+      .post('/') // Rota POST
+      .send(
+        {
+          Authorization: 'false',
+          user_id: '1',
+          medicine: 'medicine',
+          startDate: 'startDate',
+          endDate: 'endDate',
+          time: 'time',
+          frequency: 'frequency',
+        }); // Dados a serem enviados no corpo da requisição
+    expect(response.status).toBe(401);
   });
-
-  
-
 });

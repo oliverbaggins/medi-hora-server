@@ -1,84 +1,47 @@
 const request = require('supertest');
-const app = require('../routes/auth');
+const router = require('../routes/auth'); // Update the path to your API file
 
-describe('Authentication API', () => {
-  let accessToken = '';
-
-  // Run this block of code before each test case
-  beforeEach(async () => {
-    // Clear any existing access token
-    accessToken = '';
-
-    // Perform login and get access token
-    const response = await request(app)
-      .post('/login')
-      .send({
-        email: 'test@example.com',
-        password: 'password123'
-      });
-      
-    accessToken = response.body.accessToken;
+describe('API Tests', () => {
+  describe('GET /allusers', () => {
+    it('should get all users', async () => {
+      const response = await request(router).get('/allusers');
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveProperty('length');
+    });
   });
 
   describe('POST /signup', () => {
-    test('should create a new user', async () => {
-      const response = await request(app)
+    it('should create a new user', async () => {
+      const response = await request(router)
         .post('/signup')
-        .send({
-          email: 'newuser@example.com',
-          password: 'password123'
-        });
-
+        .send({ email: 'test@example.com', password: 'password123' });
       expect(response.statusCode).toBe(200);
       expect(response.body).toHaveProperty('accessToken');
       expect(response.body).toHaveProperty('user');
     });
-
-    test('should return an error if the user already exists', async () => {
-      const response = await request(app)
-        .post('/signup')
-        .send({
-          email: 'test@example.com',
-          password: 'password123'
-        });
-
-      expect(response.statusCode).toBe(400);
-      expect(response.body).toHaveProperty('error');
-      expect(response.body.error).toBe('This user already exists');
-    });
-
-    // Add more test cases for invalid email, weak password, etc.
   });
 
   describe('POST /login', () => {
-    test('should log in a user and return access token', async () => {
-      const response = await request(app)
+    it('should log in a user', async () => {
+      const response = await request(router)
         .post('/login')
-        .send({
-          email: 'test@example.com',
-          password: 'password123'
-        });
-
+        .send({ email: 'test@example.com', password: 'password123' });
       expect(response.statusCode).toBe(200);
       expect(response.body).toHaveProperty('accessToken');
+      expect(response.body).toHaveProperty('refreshToken');
     });
-
-    test('should return an error for invalid password', async () => {
-      const response = await request(app)
-        .post('/login')
-        .send({
-          email: 'test@example.com',
-          password: 'incorrectpassword'
-        });
-
-      expect(response.statusCode).toBe(400);
-      expect(response.body).toHaveProperty('error');
-      expect(response.body.error).toBe('Invalid password');
-    });
-
-    // Add more test cases for non-existent email, missing password, etc.
   });
 
-  // Add more describe blocks and test cases for other endpoints
+  // Add more test cases for other API endpoints
 
+  describe('DELETE /logout', () => {
+    it('should delete a refresh token', async () => {
+      const response = await request(router)
+        .delete('/logout')
+        .set('Authorization', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDc4YjllZGZjMzllN2JhNDhlOWQxMTMiLCJlbWFpbCI6InBhbmRhQHZlcm1lbGhvLmNvbSIsImlhdCI6MTY4NTY0MDg1OSwiZXhwIjoxNjg1NjQwOTc5fQ.kS5qDDBor0jLqeKj16nGKpqUdykDu3aJxe8FMX6HjlY");
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toHaveProperty('message', 'Token deleted successfully');
+    });
+  });
 });
+

@@ -9,6 +9,22 @@ const errorResponse = (res, statusCode, message) => {
   return res.status(statusCode).json({ error: message })
 }
 
+router.get('/loggeduser', checkAuth, async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return errorResponse(res, 404, 'User not found');
+    }
+    
+    res.json(user);
+  } catch (err) {
+    errorResponse(res, 500, err.message);
+  }
+});
+
+
 router.get('/allusers', async (req, res) => {
   try {
     const users = await User.find()
@@ -19,6 +35,8 @@ router.get('/allusers', async (req, res) => {
 })
 
 router.post('/signup', [
+  check('name', 'Please provide a name').notEmpty(),
+  check('lastname', 'Please provide a last name').notEmpty(),
   check('email', 'Please provide a valid email').isEmail(),
   check('password', 'Please provide a password that is greater than 5 characters').isLength({ min: 6 })
 ], async (req, res) => {
@@ -30,6 +48,8 @@ router.post('/signup', [
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10)
     const user = new User({
+      name: req.body.name,
+      lastname: req.body.lastname,
       email: req.body.email,
       password: hashedPassword
     });
@@ -43,7 +63,7 @@ router.post('/signup', [
     
     // Include the user ID in the token payload
     const accessToken = jwt.sign({ _id: newUser._id, email: req.body.email }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '1m'
+      expiresIn: '10s'
     });
     
     res.json({ accessToken: accessToken, user: newUser })
@@ -70,11 +90,11 @@ router.post('/login', async (req, res) => {
 
   // Include the user ID in the token payload
   const accessToken = jwt.sign({ _id: user._id, email: req.body.email }, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: '1m'
+    expiresIn: '1d'
   });
 
   const refreshToken = jwt.sign({ _id: user._id, email: req.body.email }, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: '2m'
+    expiresIn: '2d'
   });
 
   user.refreshTokens.push({ token: refreshToken });
@@ -130,7 +150,7 @@ router.post('/token', async (req, res) => {
     const { _id, email } = decodedToken;
 
     const accessToken = jwt.sign({ _id, email }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '1m'
+      expiresIn: '10s'
     })
   
     res.json({ accessToken });

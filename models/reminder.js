@@ -21,18 +21,6 @@ const remindersSchema = new mongoose.Schema({
   time: {
     type: Date,
     required: true,
-<<<<<<< HEAD
-=======
-    get: function (value) {
-      return value.toLocaleTimeString();
-    },
-    set: function (value) {
-      const timeComponents = value.split(':');
-      const hours = parseInt(timeComponents[0], 10);
-      const minutes = parseInt(timeComponents[1], 10);
-      return new Date().setHours(hours, minutes, 0, 0);
-    }
->>>>>>> 0cf3eb929e4cee73363a465d3241e2d5a39ef4a9
   },
   frequency: {
     type: String,

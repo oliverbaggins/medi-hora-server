@@ -63,7 +63,7 @@ router.post('/signup', [
     
     // Include the user ID in the token payload
     const accessToken = jwt.sign({ _id: newUser._id, email: req.body.email }, process.env.ACCESS_TOKEN_SECRET, {
-      expiresIn: '10s'
+      expiresIn: '1d'
     });
     
     res.json({ accessToken: accessToken, user: newUser })

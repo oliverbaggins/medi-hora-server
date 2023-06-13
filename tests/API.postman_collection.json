@@ -1,0 +1,604 @@
+{
+	"info": {
+		"_postman_id": "b59b6ffa-06d5-42b8-8477-01822fa76702",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27583344"
+	},
+	"item": [
+		{
+			"name": "SignUp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the access token and user object",
+							"pm.test(\"Response contains access token and user object\", function () {",
+							"    pm.response.to.have.jsonBody('accessToken');",
+							"    pm.response.to.have.jsonBody('user.name');",
+							"    pm.response.to.have.jsonBody('user.lastname');",
+							"    pm.response.to.have.jsonBody('user.email');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Panda\",\n    \"lastname\": \"Vermelho\",\n    \"email\": \"panda@vermelho.com\",\n    \"password\": \"123456\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/signup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Checking if the response returned",
+							"pm.test(\"Checking if the response returned\", function () {",
+							"     pm.response.to.be.ok;",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json;",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/auth/allusers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"allusers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the access token",
+							"pm.test(\"Response contains access token\", function () {",
+							"    pm.response.to.have.jsonBody('accessToken');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"panda@bambu.com\",\n    \"password\": \"123456\"\n}\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Logged User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the user object",
+							"pm.test(\"Response contains user object\", function () {",
+							"    pm.response.to.have.jsonBody('name');",
+							"    pm.response.to.have.jsonBody('lastname');",
+							"    pm.response.to.have.jsonBody('email');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4OTc1ZmNkZjg1MDdkNjcyYmRiYmYiLCJlbWFpbCI6InBhbmRhQGJhbWJ1LmNvbSIsImlhdCI6MTY4NjY3NTE1NSwiZXhwIjoxNjg2NzYxNTU1fQ.3a4_385EJGJJGij5R_hYL--nyTQwEkmMoUoEgO3hlIc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/auth/loggeduser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"loggeduser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Generate Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the new access token",
+							"pm.test(\"Response contains new access token\", function () {",
+							"    pm.response.to.have.jsonBody('accessToken');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4OTc1ZmNkZjg1MDdkNjcyYmRiYmYiLCJlbWFpbCI6InBhbmRhQGJhbWJ1LmNvbSIsImlhdCI6MTY4NjY3NTE1NSwiZXhwIjoxNjg2ODQ3OTU1fQ.wL2hLzE1Wl17rbzUeZYS65CW4dU5-ZCyjII15BKpK5E",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/auth/token",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Reminders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Checking if the response returned",
+							"pm.test(\"Checking if the response returned\", function () {",
+							"     pm.response.to.be.ok;",
+							"     pm.response.to.be.withBody;",
+							"     pm.response.to.be.json;",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4OTc1ZmNkZjg1MDdkNjcyYmRiYmYiLCJlbWFpbCI6InBhbmRhQGJhbWJ1LmNvbSIsImlhdCI6MTY4NjY3NTE1NSwiZXhwIjoxNjg2NzYxNTU1fQ.3a4_385EJGJJGij5R_hYL--nyTQwEkmMoUoEgO3hlIc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/reminders/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"reminders",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Specific Reminder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the reminder object",
+							"pm.test(\"Response contains reminder object\", function () {",
+							"    pm.response.to.have.jsonBody('user_id');",
+							"    pm.response.to.have.jsonBody('medicine');",
+							"    pm.response.to.have.jsonBody('startDate');",
+							"    pm.response.to.have.jsonBody('endDate');",
+							"    pm.response.to.have.jsonBody('time');",
+							"    pm.response.to.have.jsonBody('frequency');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4OTc1ZmNkZjg1MDdkNjcyYmRiYmYiLCJlbWFpbCI6InBhbmRhQGJhbWJ1LmNvbSIsImlhdCI6MTY4NjY3NTE1NSwiZXhwIjoxNjg2NzYxNTU1fQ.3a4_385EJGJJGij5R_hYL--nyTQwEkmMoUoEgO3hlIc",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/reminders/6488a05506fef0b43e81c283",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"reminders",
+						"6488a05506fef0b43e81c283"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Reminder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 201",
+							"pm.test(\"Status code is 201\", function () {",
+							"    pm.response.to.have.status(201);",
+							"});",
+							"",
+							"// Check if the response body contains the created reminder object",
+							"pm.test(\"Response contains created reminder object\", function () {",
+							"    pm.response.to.have.jsonBody('user_id');",
+							"    pm.response.to.have.jsonBody('medicine');",
+							"    pm.response.to.have.jsonBody('startDate');",
+							"    pm.response.to.have.jsonBody('endDate');",
+							"    pm.response.to.have.jsonBody('time');",
+							"    pm.response.to.have.jsonBody('frequency');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4OTc1ZmNkZjg1MDdkNjcyYmRiYmYiLCJlbWFpbCI6InBhbmRhQGJhbWJ1LmNvbSIsImlhdCI6MTY4NjY3NTE1NSwiZXhwIjoxNjg2NzYxNTU1fQ.3a4_385EJGJJGij5R_hYL--nyTQwEkmMoUoEgO3hlIc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"medicine\": \"paracetamol\",\n  \"startDate\": \"2023-05-21\",\n  \"endDate\": \"2023-06-21\",\n  \"time\": \"09:00 AM\",\n  \"frequency\": \"a cada 8 horas\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/reminders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"reminders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Reminder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the updated reminder object",
+							"pm.test(\"Response contains updated reminder object\", function () {",
+							"    pm.response.to.have.jsonBody('user_id');",
+							"    pm.response.to.have.jsonBody('medicine');",
+							"    pm.response.to.have.jsonBody('startDate');",
+							"    pm.response.to.have.jsonBody('endDate');",
+							"    pm.response.to.have.jsonBody('time');",
+							"    pm.response.to.have.jsonBody('frequency');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDg4OTc1ZmNkZjg1MDdkNjcyYmRiYmYiLCJlbWFpbCI6InBhbmRhQGJhbWJ1LmNvbSIsImlhdCI6MTY4NjY3NTE1NSwiZXhwIjoxNjg2NzYxNTU1fQ.3a4_385EJGJJGij5R_hYL--nyTQwEkmMoUoEgO3hlIc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"medicine\": \"aspirina\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/reminders/6488a05506fef0b43e81c283",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"reminders",
+						"6488a05506fef0b43e81c283"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Reminder",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the success message",
+							"pm.test(\"Response contains success message\", function () {",
+							"    pm.response.to.have.jsonBody('message');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDdmNjdjNDJkMGIzOGMxNTQxN2MzNmYiLCJlbWFpbCI6InBhbmRhQHZlcm1lbGhvLmNvbSIsImlhdCI6MTY4NjA3MTY1OCwiZXhwIjoxNjg2MTU4MDU4fQ.x_rS3uwfoiSVhhhoS-Pr1JMv3TF6LK1KWprB-bwOty8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/reminders/647f6a9a2f774c70423121d8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"reminders",
+						"647f6a9a2f774c70423121d8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the success message",
+							"pm.test(\"Response contains success message\", function () {",
+							"    pm.response.to.have.jsonBody('message');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDdmNjdjNDJkMGIzOGMxNTQxN2MzNmYiLCJlbWFpbCI6InBhbmRhQHZlcm1lbGhvLmNvbSIsImlhdCI6MTY4NjA3MTIzNiwiZXhwIjoxNjg2MDcxMjQ2fQ.t8REIi0xvuQ_C8cFJVeZ6vHFrkkRVpIXtZNoZZl_pqQ",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/auth/deleteuser/647f5c062d0b38c15417c2bd",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"deleteuser",
+						"647f5c062d0b38c15417c2bd"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Check if the response status code is 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Check if the response body contains the success message",
+							"pm.test(\"Response contains success message\", function () {",
+							"    pm.response.to.have.jsonBody('message');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NDdmNjdjNDJkMGIzOGMxNTQxN2MzNmYiLCJlbWFpbCI6InBhbmRhQHZlcm1lbGhvLmNvbSIsImlhdCI6MTY4NjA3MTQ5NSwiZXhwIjoxNjg2MjQ0Mjk1fQ.L1kLQ6hdGBV2de8wBdmB66LTz0gJi5bO5_LwOJ-SNQg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/auth/logout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,31 @@
+name: Newman Tests
+
+on:
+  push:
+    branches:
+      - main  # Modify this based on your branch name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Run Newman tests
+      run: npx newman run tests/API.postman_collection.json --reporters cli,junit --reporter-junit-export test-results.xml
+
+    - name: Publish test results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      with:
+        files: test-results.xml
+        check_name: Newman Tests

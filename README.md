@@ -1,4 +1,4 @@
-# MediHora — API de Lembretes de Remédios
+# MediHora – API de Lembretes de Remédios
 
 **MediHora** é uma **API REST** (Node.js + Express + MongoDB) para cadastro de usuários, autenticação via **JWT** (access/refresh tokens) e **CRUD de lembretes de medicamentos**.
 

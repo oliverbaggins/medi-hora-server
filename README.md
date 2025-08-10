@@ -202,4 +202,4 @@ O repositório inclui `tests/API.postman_collection.json` com chamadas de exempl
 
 - **Back-end:** [Luiz Lopes](https://github.com/luizlopesbr)  
 - **Front-end:** [Kauan Ribeiro](https://github.com/KauanRibeiroGondim)  
-- **UX/UI:** [Emmanuel Soares](https://www.linkedin.com/in/emmanuelss/)  
+- **UX/UI:** [Emmanuel Soares](https://github.com/EmmanuelSoares)  

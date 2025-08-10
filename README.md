@@ -196,5 +196,3 @@ O repositório inclui `tests/API.postman_collection.json` com chamadas de exempl
 - Padronizar `expiresIn` do access token (ex.: `15m`/`1h`) e o *refresh* (ex.: `7d`/`15d`).
 - Habilitar CORS conforme o cliente.
 - Logs estruturados e variáveis sensíveis **somente via ambiente**.
-
----

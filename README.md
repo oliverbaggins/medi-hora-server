@@ -188,7 +188,6 @@ curl -H "Authorization: <ACCESS_TOKEN_AQUI>"  http://localhost:3000/reminders
 ## Postman
 O repositório inclui `tests/API.postman_collection.json` com chamadas de exemplo (signup, login, refresh, CRUD de reminders). Basta **importar** no Postman e usar `http://localhost:3000` como base.
 
----
 
 ## Boas Práticas Recomendadas
 - Adotar prefixo `Bearer` no `Authorization` (e ajustar o middleware).
@@ -196,3 +195,11 @@ O repositório inclui `tests/API.postman_collection.json` com chamadas de exempl
 - Padronizar `expiresIn` do access token (ex.: `15m`/`1h`) e o *refresh* (ex.: `7d`/`15d`).
 - Habilitar CORS conforme o cliente.
 - Logs estruturados e variáveis sensíveis **somente via ambiente**.
+
+---
+
+## Colaboradores
+
+- **Back-end:** [Luiz Lopes](https://github.com/luizlopesbr)  
+- **Front-end:** [Kauan Ribeiro](https://github.com/KauanRibeiroGondim)  
+- **UX/UI:** [Emmanuel Soares](https://www.linkedin.com/in/emmanuelss/)  
